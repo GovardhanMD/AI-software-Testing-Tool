@@ -1,0 +1,18 @@
+Application Name: Calculator API
+
+Endpoint:
+POST /calculate
+
+Input Parameters:
+
+* number1 (integer)
+* number2 (integer)
+* operation (add, subtract, multiply, divide)
+
+Expected Behavior:
+
+* add → returns sum
+* subtract → returns difference
+* multiply → returns product
+* divide → returns quotient
+* division by zero → return error

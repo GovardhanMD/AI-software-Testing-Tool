@@ -1,0 +1,29 @@
+Application Name: Login System
+
+Description:
+This API allows users to log into the system using email and password.
+
+Endpoint:
+POST /login
+
+Input Parameters:
+
+* email (string, required)
+* password (string, required)
+
+Valid Conditions:
+
+* Email must be in valid format
+* Password must be at least 6 characters
+
+Expected Behavior:
+
+* If email and password are correct, user is logged in successfully.
+* If email format is invalid, return error message.
+* If password is less than 6 characters, return validation error.
+* If credentials are incorrect, return authentication failed message.
+
+Response Codes:
+200 - Login Successful
+400 - Validation Error
+401 - Unauthorized

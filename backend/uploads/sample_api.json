@@ -1,0 +1,31 @@
+{
+  "api_name": "User Management API",
+  "version": "1.0",
+  "endpoints": [
+    {
+      "path": "/users",
+      "method": "GET",
+      "description": "Get all users"
+    },
+    {
+      "path": "/users",
+      "method": "POST",
+      "description": "Create a new user"
+    },
+    {
+      "path": "/users/{id}",
+      "method": "GET",
+      "description": "Get user by ID"
+    },
+    {
+      "path": "/users/{id}",
+      "method": "PUT",
+      "description": "Update user"
+    },
+    {
+      "path": "/users/{id}",
+      "method": "DELETE",
+      "description": "Delete user"
+    }
+  ]
+}

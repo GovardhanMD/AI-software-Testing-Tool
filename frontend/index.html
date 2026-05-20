@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Testing Automation Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Intelligent Software Testing Automation</h1>
+            <p>AI-Powered Test Case Generation & Execution</p>
+        </header>
+
+        <nav>
+            <a href="index.html" class="active">Upload & Generate</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+
+        <div class="card">
+            <h2>Step 1: Upload Code or API Specification</h2>
+            <div class="upload-section">
+                <input type="file" id="fileInput" accept=".py,.json,.txt">
+                <button onclick="uploadFile()" class="btn btn-primary">Upload File</button>
+                <div id="uploadStatus"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Step 2: Generate Test Cases</h2>
+            <div class="options">
+                <label>
+                    <input type="checkbox" id="useAI"> Use AI (OpenAI API)
+                </label>
+                <div id="apiKeySection" style="display:none; margin-top:10px;">
+                    <input type="password" id="apiKey" placeholder="Enter OpenAI API Key">
+                </div>
+            </div>
+            <button onclick="generateTests()" class="btn btn-success" id="generateBtn" disabled>Generate Test Cases</button>
+            <div id="testCasesDisplay"></div>
+        </div>
+
+        <div class="card">
+            <h2>Step 3: Execute Tests</h2>
+            <button onclick="executeTests()" class="btn btn-warning" id="executeBtn" disabled>Run Tests</button>
+            <div id="executionResults"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

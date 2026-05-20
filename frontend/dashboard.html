@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Test Results Dashboard</h1>
+            <p>View All Test Execution Reports</p>
+        </header>
+
+        <nav>
+            <a href="index.html">Upload & Generate</a>
+            <a href="dashboard.html" class="active">Dashboard</a>
+        </nav>
+
+        <div class="card">
+            <h2>Test Run History</h2>
+            <button onclick="loadTestRuns()" class="btn btn-primary">Refresh</button>
+            <div id="testRunsList"></div>
+        </div>
+
+        <div class="card" id="detailsCard" style="display:none;">
+            <h2>Test Run Details</h2>
+            <div id="runDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+
+        async function loadTestRuns() {
+            try {
+               const response = await fetch(`${API_URL}/get-test-runs`);
+                const data = await response.json();
+                displayTestRuns(data.runs);
+            } catch (error) {
+                alert('Error loading test runs: ' + error.message);
+            }
+        }
+
+        function displayTestRuns(runs) {
+            const container = document.getElementById('testRunsList');
+            
+            if (runs.length === 0) {
+                container.innerHTML = '<p class="info">No test runs found. Upload and execute tests first.</p>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>ID</th><th>File</th><th>Timestamp</th><th>Total</th><th>Passed</th><th>Failed</th><th>Action</th></tr></thead><tbody>';
+            
+            runs.forEach(run => {
+                const passRate = ((run.passed / run.total_tests) * 100).toFixed(1);
+                html += `
+                    <tr>
+                        <td>${run.id}</td>
+                        <td>${run.filename}</td>
+                        <td>${new Date(run.timestamp).toLocaleString()}</td>
+                        <td>${run.total_tests}</td>
+                        <td class="success">${run.passed}</td>
+                        <td class="error">${run.failed}</td>
+                        <td><button onclick="viewDetails(${run.id})" class="btn-small">View</button></td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function viewDetails(runId) {
+            try {
+               const response = await fetch(`${API_URL}/get-test-runs/${runId}`); 
+                const run = await response.json();
+                displayRunDetails(run);
+            } catch (error) {
+                alert('Error loading details: ' + error.message);
+            }
+        }
+
+        function displayRunDetails(run) {
+            const card = document.getElementById('detailsCard');
+            const container = document.getElementById('runDetails');
+            
+            let html = `
+                <div class="stats">
+                    <div class="stat-box">
+                        <h3>${run.total_tests}</h3>
+                        <p>Total Tests</p>
+                    </div>
+                    <div class="stat-box success">
+                        <h3>${run.passed}</h3>
+                        <p>Passed</p>
+                    </div>
+                    <div class="stat-box error">
+                        <h3>${run.failed}</h3>
+                        <p>Failed</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>${((run.passed / run.total_tests) * 100).toFixed(1)}%</h3>
+                        <p>Pass Rate</p>
+                    </div>
+                </div>
+                <h3>Test Case Results</h3>
+                <div class="test-results">
+            `;
+            
+            run.test_cases.forEach(test => {
+                const statusClass = test.status === 'passed' ? 'success' : 'error';
+                html += `
+                    <div class="test-case ${statusClass}">
+                        <h4>${test.name}</h4>
+                        <p><strong>Type:</strong> ${test.type}</p>
+                        <p><strong>Description:</strong> ${test.description}</p>
+                        <p><strong>Status:</strong> <span class="${statusClass}">${test.status.toUpperCase()}</span></p>
+                        <p><strong>Message:</strong> ${test.message}</p>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+            card.style.display = 'block';
+            card.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onload = loadTestRuns;
+    </script>
+</body>
+</html>
